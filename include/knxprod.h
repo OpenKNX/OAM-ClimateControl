@@ -21,7 +21,7 @@
 #define MAIN_ApplicationVersion 1
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
-#define MAIN_ParameterSize 7191
+#define MAIN_ParameterSize 9801
 #define MAIN_MaxKoNumber 1059
 #define MAIN_OrderNumber "MGKnxCLI"
 #define BASE_ModuleVersion 23
@@ -619,7 +619,7 @@
 #define KoCLI_CTargetTemp                         (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCTargetTemp)))
 // {{0: HVAC %C%}}: Aktuelle Solltemperatur
 #define KoCLI_CTargetTempFb                       (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCTargetTempFb)))
-// {{0: HVAC Kühl-/Heizsystem 1 %C%}}: Solltemperatur verringern/erhöhen
+// {{0: HVAC %C%}}: Solltemperatur verringern/erhöhen
 #define KoCLI_CTargetTempRelativ                  (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCTargetTempRelativ)))
 // {{0: HVAC %C%}}: Raumtemperatur
 #define KoCLI_CRoomTemp                           (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCRoomTemp)))
@@ -1187,7 +1187,7 @@
 // Welcher Feiertag ist morgen?
 #define KoLOG_Holiday2                            (knx.getGroupObject(LOG_KoHoliday2))
 
-#define LOG_ChannelCount 20
+#define LOG_ChannelCount 50
 
 // Parameter per channel
 #define LOG_ParamBlockOffset 4235
@@ -3064,7 +3064,7 @@
 // Ausgang
 #define KoLOG_KOfO                                (knx.getGroupObject(LOG_KoCalcNumber(LOG_KoKOfO)))
 
-#define FCB_VisibleChannels                     5975      // uint8_t
+#define FCB_VisibleChannels                     8585      // uint8_t
 
 // Verfügbare Kanäle
 #define ParamFCB_VisibleChannels                     (knx.paramByte(FCB_VisibleChannels))
@@ -3072,7 +3072,7 @@
 #define FCB_ChannelCount 15
 
 // Parameter per channel
-#define FCB_ParamBlockOffset 5976
+#define FCB_ParamBlockOffset 8586
 #define FCB_ParamBlockSize 81
 #define FCB_ParamCalcIndex(index) (index + FCB_ParamBlockOffset + _channelIndex * FCB_ParamBlockSize)
 
@@ -4144,7 +4144,7 @@
 #define BASE_KommentarModuleModuleParamSize 0
 #define BASE_KommentarModuleSubmodulesParamSize 0
 #define BASE_KommentarModuleParamSize 0
-#define BASE_KommentarModuleParamOffset 7191
+#define BASE_KommentarModuleParamOffset 9801
 #define BASE_KommentarModuleCalcIndex(index, m1) (index + BASE_KommentarModuleParamOffset + _channelIndex * BASE_KommentarModuleCount * BASE_KommentarModuleParamSize + m1 * BASE_KommentarModuleParamSize)
 
 
