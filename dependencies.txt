@@ -1,6 +1,6 @@
 ------- Built with -------
 7124a64 v1 lib/knx https://github.com/OpenKNX/knx.git
-648373d v1 lib/OFM-ClimateControl https://github.com/OpenKNX/OFM-ClimateControl.git
+c4a7627 v1 lib/OFM-ClimateControl https://github.com/OpenKNX/OFM-ClimateControl.git
 eca6977 v1 lib/OFM-ConfigTransfer https://github.com/OpenKNX/OFM-ConfigTransfer.git
 178f186 v1 lib/OFM-FileTransferModule https://github.com/OpenKNX/OFM-FileTransferModule.git
 d7f5bdd v1 lib/OFM-FunctionBlocks https://github.com/OpenKNX/OFM-FunctionBlocks.git

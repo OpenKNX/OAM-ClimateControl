@@ -18,7 +18,7 @@
 #define MAIN_FirmwareName "Klimasteuerung (HVAC) (Dev)"
 #define MAIN_OpenKnxId 0xAE
 #define MAIN_ApplicationNumber 57
-#define MAIN_ApplicationVersion 1
+#define MAIN_ApplicationVersion 3
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
 #define MAIN_ParameterSize 9801
@@ -276,9 +276,9 @@
 #define     CLI_SendReadRequestMask 0x08
 #define     CLI_SendReadRequestShift 3
 #define CLI_AverageTempSummer                   228      // uint8_t
-#define CLI_AverageDays                         229      // 4 Bits, Bit 7-4
-#define     CLI_AverageDaysMask 0xF0
-#define     CLI_AverageDaysShift 4
+#define CLI_AverageDaysSummer                   229      // 4 Bits, Bit 7-4
+#define     CLI_AverageDaysSummerMask 0xF0
+#define     CLI_AverageDaysSummerShift 4
 #define CLI_AverageTempWinter                   230      // uint8_t
 #define CLI_AverageDaysWinter                   231      // 4 Bits, Bit 7-4
 #define     CLI_AverageDaysWinterMask 0xF0
@@ -308,7 +308,7 @@
 // Sommer bei ≥
 #define ParamCLI_AverageTempSummer                   (knx.paramByte(CLI_AverageTempSummer))
 // für
-#define ParamCLI_AverageDays                         ((knx.paramByte(CLI_AverageDays) & CLI_AverageDaysMask) >> CLI_AverageDaysShift)
+#define ParamCLI_AverageDaysSummer                   ((knx.paramByte(CLI_AverageDaysSummer) & CLI_AverageDaysSummerMask) >> CLI_AverageDaysSummerShift)
 // Winter bei ≤
 #define ParamCLI_AverageTempWinter                   (knx.paramByte(CLI_AverageTempWinter))
 // für
@@ -320,19 +320,19 @@
 // Winterbetrieb ab
 #define ParamCLI_WinterTimeStartDay                  ((knx.paramInt(CLI_WinterTimeStartDay) & CLI_WinterTimeStartDayMask) >> CLI_WinterTimeStartDayShift)
 
-#define CLI_KoSummer 500
-#define CLI_KoSummerStatus 501
+#define CLI_KoWinter 500
+#define CLI_KoWinterStatus 501
 #define CLI_KoOutsideTemp 502
-#define CLI_KoDayAverageIn 503
+#define CLI_KoDayAverage 503
 
-// Winter- / Sommerbetrieb
-#define KoCLI_Summer                              (knx.getGroupObject(CLI_KoSummer))
-// Winter- / Sommerbetrieb Status
-#define KoCLI_SummerStatus                        (knx.getGroupObject(CLI_KoSummerStatus))
+// Sommer- / Winterbetrieb
+#define KoCLI_Winter                              (knx.getGroupObject(CLI_KoWinter))
+// Sommer- / Winterbetrieb Status
+#define KoCLI_WinterStatus                        (knx.getGroupObject(CLI_KoWinterStatus))
 // Außentemperatur
 #define KoCLI_OutsideTemp                         (knx.getGroupObject(CLI_KoOutsideTemp))
 // 
-#define KoCLI_DayAverageIn                        (knx.getGroupObject(CLI_KoDayAverageIn))
+#define KoCLI_DayAverage                          (knx.getGroupObject(CLI_KoDayAverage))
 
 #define CLI_ChannelCount 15
 
@@ -4180,7 +4180,7 @@ enum class PT_CLIAverageTemperatureCalculation
     EveryHour = 0,
     MannheimHours = 1,
     MinMaxAverage = 2,
-    DailyAverageTemperature = 3
+    GroupObjectDailyAverage = 3
 };
 
 enum class PT_CLIDeviceSelection
