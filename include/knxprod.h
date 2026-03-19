@@ -18,7 +18,7 @@
 #define MAIN_FirmwareName "Klimasteuerung (HVAC) (Dev)"
 #define MAIN_OpenKnxId 0xAE
 #define MAIN_ApplicationNumber 57
-#define MAIN_ApplicationVersion 3
+#define MAIN_ApplicationVersion 4
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
 #define MAIN_ParameterSize 9801
@@ -375,12 +375,12 @@
 #define CLI_CHWaitTimeAfterPowerUp2             19      // 7 Bits, Bit 6-0
 #define     CLI_CHWaitTimeAfterPowerUp2Mask 0x7F
 #define     CLI_CHWaitTimeAfterPowerUp2Shift 0
-#define CLI_CHoolDeviceSelection                34      // 4 Bits, Bit 7-4
-#define     CLI_CHoolDeviceSelectionMask 0xF0
-#define     CLI_CHoolDeviceSelectionShift 4
-#define CLI_CHoolDeactiveInWinter               35      // 1 Bit, Bit 7
-#define     CLI_CHoolDeactiveInWinterMask 0x80
-#define     CLI_CHoolDeactiveInWinterShift 7
+#define CLI_CHCoolDeviceSelection               34      // 4 Bits, Bit 7-4
+#define     CLI_CHCoolDeviceSelectionMask 0xF0
+#define     CLI_CHCoolDeviceSelectionShift 4
+#define CLI_CHCoolDeactiveInWinter              35      // 1 Bit, Bit 7
+#define     CLI_CHCoolDeactiveInWinterMask 0x80
+#define     CLI_CHCoolDeactiveInWinterShift 7
 #define CLI_CHHeatDeviceSelection               36      // 4 Bits, Bit 7-4
 #define     CLI_CHHeatDeviceSelectionMask 0xF0
 #define     CLI_CHHeatDeviceSelectionShift 4
@@ -408,6 +408,12 @@
 #define CLI_CHBehaviorOnDeviceChange            44      // 4 Bits, Bit 7-4
 #define     CLI_CHBehaviorOnDeviceChangeMask 0xF0
 #define     CLI_CHBehaviorOnDeviceChangeShift 4
+#define CLI_CHCoolingWinterAllowed              44      // 1 Bit, Bit 6
+#define     CLI_CHCoolingWinterAllowedMask 0x40
+#define     CLI_CHCoolingWinterAllowedShift 6
+#define CLI_CHHeatingSummerAllowed              44      // 1 Bit, Bit 5
+#define     CLI_CHHeatingSummerAllowedMask 0x20
+#define     CLI_CHHeatingSummerAllowedShift 5
 #define CLI_CHWindowOpenEnabled                 45      // 1 Bit, Bit 7
 #define     CLI_CHWindowOpenEnabledMask 0x80
 #define     CLI_CHWindowOpenEnabledShift 7
@@ -487,12 +493,12 @@
 // Wartezeit nach Einschalten
 #define ParamCLI_CHWaitTimeAfterPowerUp2             (PT_CLIWaitTimeAfterPowerUp)(knx.paramByte(CLI_ParamCalcIndex(CLI_CHWaitTimeAfterPowerUp2)) & CLI_CHWaitTimeAfterPowerUp2Mask)
 // Durch
-#define ParamCLI_CHoolDeviceSelection                (PT_CLIDeviceSelection)((knx.paramByte(CLI_ParamCalcIndex(CLI_CHoolDeviceSelection)) & CLI_CHoolDeviceSelectionMask) >> CLI_CHoolDeviceSelectionShift)
-// Kühlen im Winterbetrieb nicht verwenden
-#define ParamCLI_CHoolDeactiveInWinter               ((bool)(knx.paramByte(CLI_ParamCalcIndex(CLI_CHoolDeactiveInWinter)) & CLI_CHoolDeactiveInWinterMask))
+#define ParamCLI_CHCoolDeviceSelection               (PT_CLIDeviceSelection)((knx.paramByte(CLI_ParamCalcIndex(CLI_CHCoolDeviceSelection)) & CLI_CHCoolDeviceSelectionMask) >> CLI_CHCoolDeviceSelectionShift)
+// Kühlen im Winterbetrieb gesperrt
+#define ParamCLI_CHCoolDeactiveInWinter              ((bool)(knx.paramByte(CLI_ParamCalcIndex(CLI_CHCoolDeactiveInWinter)) & CLI_CHCoolDeactiveInWinterMask))
 // Durch
 #define ParamCLI_CHHeatDeviceSelection               (PT_CLIDeviceSelection)((knx.paramByte(CLI_ParamCalcIndex(CLI_CHHeatDeviceSelection)) & CLI_CHHeatDeviceSelectionMask) >> CLI_CHHeatDeviceSelectionShift)
-// Heizen im Sommerbetrieb nicht verwenden
+// Heizen im Sommerbetrieb gesperrt
 #define ParamCLI_CHHeatDeactiveInSummer              ((bool)(knx.paramByte(CLI_ParamCalcIndex(CLI_CHHeatDeactiveInSummer)) & CLI_CHHeatDeactiveInSummerMask))
 // Durch
 #define ParamCLI_CHDehumDeviceSelection              (PT_CLIDeviceSelection)((knx.paramByte(CLI_ParamCalcIndex(CLI_CHDehumDeviceSelection)) & CLI_CHDehumDeviceSelectionMask) >> CLI_CHDehumDeviceSelectionShift)
@@ -508,6 +514,10 @@
 #define ParamCLI_CHAutoFanDeviceSelection            (knx.paramByte(CLI_ParamCalcIndex(CLI_CHAutoFanDeviceSelection)) & CLI_CHAutoFanDeviceSelectionMask)
 // Manuelle Änderung am Kühl-/Heizsystem
 #define ParamCLI_CHBehaviorOnDeviceChange            (PT_CLIBehaviorDeviceChange)((knx.paramByte(CLI_ParamCalcIndex(CLI_CHBehaviorOnDeviceChange)) & CLI_CHBehaviorOnDeviceChangeMask) >> CLI_CHBehaviorOnDeviceChangeShift)
+// Kühlen im Winterbetrieb erlaubt
+#define ParamCLI_CHCoolingWinterAllowed              ((bool)(knx.paramByte(CLI_ParamCalcIndex(CLI_CHCoolingWinterAllowed)) & CLI_CHCoolingWinterAllowedMask))
+// Heizen im Sommerbetrieb erlaubt
+#define ParamCLI_CHHeatingSummerAllowed              ((bool)(knx.paramByte(CLI_ParamCalcIndex(CLI_CHHeatingSummerAllowed)) & CLI_CHHeatingSummerAllowedMask))
 // Fenster offen Behandlung
 #define ParamCLI_CHWindowOpenEnabled                 ((bool)(knx.paramByte(CLI_ParamCalcIndex(CLI_CHWindowOpenEnabled)) & CLI_CHWindowOpenEnabledMask))
 // Aktion
@@ -607,21 +617,21 @@
 #define CLI_KoCWindowOpen 32
 #define CLI_KoCWindowOpenAlarm 33
 
-// {{0: HVAC %C%}}: Modus Auswahl
+// {{0:HVAC %C%}}: Modus Auswahl
 #define KoCLI_CModeSelection                      (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCModeSelection)))
-// {{0: HVAC %C%}}: Modus Aktuelle Auswahl
+// {{0:HVAC %C%}}: Modus Aktuelle Auswahl
 #define KoCLI_CModeSelectionFb                    (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCModeSelectionFb)))
-// {{0: HVAC %C%}}: Ein/Aus
+// {{0:HVAC %C%}}: Ein/Aus
 #define KoCLI_CPower                              (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCPower)))
-// {{0: HVAC %C%}}: Aktueller Ein/Aus Zustand
+// {{0:HVAC %C%}}: Aktueller Ein/Aus Zustand
 #define KoCLI_CPowerFb                            (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCPowerFb)))
-// {{0: HVAC %C%}}: Solltemperatur
+// {{0:HVAC %C%}}: Solltemperatur
 #define KoCLI_CTargetTemp                         (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCTargetTemp)))
-// {{0: HVAC %C%}}: Aktuelle Solltemperatur
+// {{0:HVAC %C%}}: Aktuelle Solltemperatur
 #define KoCLI_CTargetTempFb                       (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCTargetTempFb)))
-// {{0: HVAC %C%}}: Solltemperatur verringern/erhöhen
+// {{0:HVAC %C%}}: Solltemperatur verringern/erhöhen
 #define KoCLI_CTargetTempRelativ                  (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCTargetTempRelativ)))
-// {{0: HVAC %C%}}: Raumtemperatur
+// {{0:HVAC %C%}}: Raumtemperatur
 #define KoCLI_CRoomTemp                           (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCRoomTemp)))
 // 
 #define KoCLI_CKo8                                (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo8)))
@@ -639,11 +649,11 @@
 #define KoCLI_CKo14                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo14)))
 // 
 #define KoCLI_CKo15                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo15)))
-// {{0: HVAC Kühl-/Heizsystem 1 %C%}}: Strom
+// {{0:HVAC %C% Kühl-/Heizsystem 1}}: Strom
 #define KoCLI_CDev1Power                          (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCDev1Power)))
-// {{0: HVAC Kühl-/Heizsystem 1 %C%}}: Solltemperatur
+// {{0:HVAC %C% Kühl-/Heizsystem 1}}: Solltemperatur
 #define KoCLI_CDev1Set                            (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCDev1Set)))
-// {{0: HVAC Kühl-/Heizsystem 1 %C%}}: Solltemperatur Rückmeldung
+// {{0:HVAC %C% Kühl-/Heizsystem 1}}: Solltemperatur Rückmeldung
 #define KoCLI_CDev1SetFb                          (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCDev1SetFb)))
 // 
 #define KoCLI_CDev1RoomTemp                       (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCDev1RoomTemp)))
@@ -663,17 +673,17 @@
 #define KoCLI_CKo26                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo26)))
 // 
 #define KoCLI_CKo27                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo27)))
-// {{0: HVAC Kühl-/Heizsystem 1 %C%}}: Strom
+// {{0:HVAC %C%: Kühl-/Heizsystem 2}}: Strom
 #define KoCLI_CDev2Power                          (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCDev2Power)))
-// {{0: HVAC Kühl-/Heizsystem 1 %C%}}: Solltemperatur
+// {{0:HVAC %C%: Kühl-/Heizsystem 2}}: Solltemperatur
 #define KoCLI_CDev2Set                            (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCDev2Set)))
-// {{0: HVAC Kühl-/Heizsystem 1 %C%}}: Solltemperatur Rückmeldung
+// {{0:HVAC %C%: Kühl-/Heizsystem 2}}: Solltemperatur Rückmeldung
 #define KoCLI_CDev2SetFb                          (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCDev2SetFb)))
 // 
 #define KoCLI_CDev2RoomTemp                       (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCDev2RoomTemp)))
-// {{0: HVAC %C%}}: Fenster Offen
+// {{0:HVAC %C%}}: Fenster Offen
 #define KoCLI_CWindowOpen                         (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCWindowOpen)))
-// {{0: HVAC %C%}}: Fenster Offen Alarm
+// {{0:HVAC %C%}}: Fenster Offen Alarm
 #define KoCLI_CWindowOpenAlarm                    (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCWindowOpenAlarm)))
 
 #define LOG_VisibleChannels                     1228      // uint8_t
@@ -4187,7 +4197,8 @@ enum class PT_CLIDeviceSelection
 {
     Disabled = 0,
     CoolingHeatingSystem1 = 1,
-    CoolingHeatingSystem2 = 2
+    CoolingHeatingSystem2 = 2,
+    CoolingHeatingSystem1And2 = 3
 };
 
 enum class PT_CLIDeviceSelectionFix

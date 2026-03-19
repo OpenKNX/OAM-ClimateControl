@@ -39,20 +39,25 @@ if (!$?) { exit 1 }
 # if (!$?) { exit 1 }
 
 
-# ../OGM-Common/scripts/setup/reusable/Build-Step.ps1 release_OpenKNX_UP1_GW_2XUART firmware-Aircondition-OpenKNX-UP1-GW-2xUART uf2
-# if (!$?) { exit 1 }
+# build firmware for PiPico-BCU-Connector
+lib/OGM-Common/scripts/setup/reusable/Build-Step.ps1 release_SMARTMF_SENSORMODUL firmware-SMARTMF_SENSORMODUL uf2
+if (!$?) { exit 1 }
 
-#  ../OGM-Common/scripts/setup/reusable/Build-Step.ps1 release_Adafruit_Feather_ESP32_V2_TP firmware-Aircondition-Adafruit_Feather_ESP32_V2_TP esp32
-#  if (!$?) { exit 1 }
+# build firmware for PiPico-BCU-Connector
+lib/OGM-Common/scripts/setup/reusable/Build-Step.ps1 release_PiPico_BCU_Connector firmware-PiPico-BCU-Connector uf2
+if (!$?) { exit 1 }
 
-#  ../OGM-Common/scripts/setup/reusable/Build-Step.ps1 release_Adafruit_Feather_ESP32_V2_IP firmware-Aircondition-Adafruit_Feather_ESP32_V2_IP esp32
-#  if (!$?) { exit 1 }
+# build firmware for 1TE-RP2040-SmartMF
+lib/OGM-Common/scripts/setup/reusable/Build-Step.ps1 release_SMARTMF_1TE_REG firmware_SMARTMF_1TE_REG uf2
+if (!$?) { exit 1 }
 
-#  ../OGM-Common/scripts/setup/reusable/Build-Step.ps1 release_AZDelivery_DevKit_C_V4_TP firmware-Aircondition-AZDelivery_DevKit_C_V4_TP esp32
-#  if (!$?) { exit 1 }
+# build firmware for OpenKNX-REG1-Base
+lib/OGM-Common/scripts/setup/reusable/Build-Step.ps1 release_OpenKNX_REG1_Controller2040 firmware-OpenKNX-REG1-BASE-V0 uf2
+if (!$?) { exit 1 }
 
-#  ../OGM-Common/scripts/setup/reusable/Build-Step.ps1 release_AZDelivery_DevKit_C_V4_IP firmware-Aircondition-AZDelivery_DevKit_C_V4_IP esp32
-#  if (!$?) { exit 1 }
+# build firmware for OpenKNX-REG1-Base
+lib/OGM-Common/scripts/setup/reusable/Build-Step.ps1 release_OpenKNX_REG1_BASE_V1 firmware-OpenKNX-REG1-BASE-V1 uf2
+if (!$?) { exit 1 }
 
 
 # execute generic post-build steps

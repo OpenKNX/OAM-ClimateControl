@@ -18,6 +18,6 @@
   <op:config name="%NET_ServiceNTP%" value="1" />
   <op:config name="%NET_WifiTool%" value="0" />
 
-  <op:config name="%CLI_NumChannelsDefault%" value="2" />
+  <op:config name="%CLI_NumChannelsDefault%" value="1" />
 
 </KNX>
