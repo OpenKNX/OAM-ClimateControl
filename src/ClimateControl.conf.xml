@@ -20,4 +20,7 @@
 
   <op:config name="%CLI_NumChannelsDefault%" value="1" />
 
+  <op:config name="%LOG_EnableSave%" value="1" />
+  <op:config name="%BASE_ShowDeviceDependentLedSelector%" value="1"></op:config>
+
 </KNX>
