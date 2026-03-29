@@ -28,7 +28,8 @@
                 "--Debug",
                 "-h",
                 "include/knxprod.h",
-                "src/ClimateControl-Dev"
+                "src/ClimateControl-Dev",
+                "--ExchangeKoTexts"
             ],
             "problemMatcher": [],
             "group": "test"
