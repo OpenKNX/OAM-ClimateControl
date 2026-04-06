@@ -8,8 +8,10 @@
 void setup()
 {
     openknx.init();
+#ifdef ParamNET_NTP
 #if defined(KNX_IP_WIFI) || defined(KNX_IP_LAN)
     openknx.addModule(0, openknxNetwork);
+#endif
 #endif
     openknx.addModule(1, openknxLogic);
     openknx.addModule(2, openknxFunctionBlocksModule);
