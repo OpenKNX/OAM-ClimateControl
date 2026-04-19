@@ -14,19 +14,19 @@
 #define ETS_ModuleId_CLI 3
 #define ETS_ModuleId_LOG 4
 #define ETS_ModuleId_FCB 5
-#define MAIN_FirmwareName "Klimasteuerung (HVAC) (Beta)"
+#define MAIN_FirmwareName "Klimasteuerung (HVAC) (Dev)"
 #define MAIN_OpenKnxId 0xAE
-#define MAIN_ApplicationNumber 58
-#define MAIN_ApplicationVersion 2
-#define MAIN_FirmwareRevision 1
+#define MAIN_ApplicationNumber 57
+#define MAIN_ApplicationVersion 16
+#define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
 #define MAIN_ParameterSize 9827
-#define MAIN_MaxKoNumber 1089
+#define MAIN_MaxKoNumber 1194
 #define MAIN_OrderNumber "MGKnxCLI"
 #define BASE_ModuleVersion 23
 #define UCT_ModuleVersion 5
 #define CLI_ModuleVersion 1
-#define LOG_ModuleVersion 65
+#define LOG_ModuleVersion 66
 #define FCB_ModuleVersion 10
 // Parameter with single occurrence
 
@@ -228,7 +228,7 @@
 
 // Anzahl der Räume
 #define ParamCLI_VisibleChannels                     (knx.paramByte(CLI_VisibleChannels))
-// Gruppenobjekt
+// Objekt
 #define ParamCLI_SummerWinterKo                      ((bool)(knx.paramByte(CLI_SummerWinterKo) & CLI_SummerWinterKoMask))
 // Datum
 #define ParamCLI_SummerWinterDate                    ((bool)(knx.paramByte(CLI_SummerWinterDate) & CLI_SummerWinterDateMask))
@@ -288,6 +288,9 @@
 #define CLI_CHTargetLimitHandling                0      // 1 Bit, Bit 4
 #define     CLI_CHTargetLimitHandlingMask 0x10
 #define     CLI_CHTargetLimitHandlingShift 4
+#define CLI_CHModeFeedbackReturnOff              0      // 1 Bit, Bit 3
+#define     CLI_CHModeFeedbackReturnOffMask 0x08
+#define     CLI_CHModeFeedbackReturnOffShift 3
 #define CLI_CHRelativTempChangeHeating           1      // 8 Bits, Bit 7-0
 #define CLI_CHTargetMinHeating                   2      // float (2 Byte)
 #define CLI_CHTargetMaxHeating                   4      // float (2 Byte)
@@ -332,6 +335,9 @@
 #define CLI_CHTargetTempRounding1               25      // 4 Bits, Bit 7-4
 #define     CLI_CHTargetTempRounding1Mask 0xF0
 #define     CLI_CHTargetTempRounding1Shift 4
+#define CLI_CHIsActive1                         25      // 2 Bits, Bit 3-2
+#define     CLI_CHIsActive1Mask 0x0C
+#define     CLI_CHIsActive1Shift 2
 #define CLI_CHPWM1                              26      // uint16_t
 #define CLI_CHControlMode2                      28      // 4 Bits, Bit 7-4
 #define     CLI_CHControlMode2Mask 0xF0
@@ -353,6 +359,9 @@
 #define CLI_CHTargetTempRounding2               33      // 4 Bits, Bit 7-4
 #define     CLI_CHTargetTempRounding2Mask 0xF0
 #define     CLI_CHTargetTempRounding2Shift 4
+#define CLI_CHIsActive2                         33      // 2 Bits, Bit 3-2
+#define     CLI_CHIsActive2Mask 0x0C
+#define     CLI_CHIsActive2Shift 2
 #define CLI_CHPWM2                              34      // uint16_t
 #define CLI_CHCoolDeviceSelection               36      // 4 Bits, Bit 7-4
 #define     CLI_CHCoolDeviceSelectionMask 0xF0
@@ -490,10 +499,12 @@
 #define ParamCLI_CHChannelDisabled                   ((bool)(knx.paramByte(CLI_ParamCalcIndex(CLI_CHChannelDisabled)) & CLI_CHChannelDisabledMask))
 // Objekt für relative Solltemperaturänderung
 #define ParamCLI_CHKOForRelativTempChange            ((bool)(knx.paramByte(CLI_ParamCalcIndex(CLI_CHKOForRelativTempChange)) & CLI_CHKOForRelativTempChangeMask))
-// Modusauswahl schaltet ein
+// Modus Auswahl schaltet EIN
 #define ParamCLI_CHModeSelectionTurnOn               ((bool)(knx.paramByte(CLI_ParamCalcIndex(CLI_CHModeSelectionTurnOn)) & CLI_CHModeSelectionTurnOnMask))
 // Bei falscher Zieltemperatur
 #define ParamCLI_CHTargetLimitHandling               (PT_CLITargetLimitHandling)((knx.paramByte(CLI_ParamCalcIndex(CLI_CHTargetLimitHandling)) & CLI_CHTargetLimitHandlingMask) >> CLI_CHTargetLimitHandlingShift)
+// Modus Auswahl Aktueller Status bei AUS
+#define ParamCLI_CHModeFeedbackReturnOff             (PT_CLIModeFeedback)((knx.paramByte(CLI_ParamCalcIndex(CLI_CHModeFeedbackReturnOff)) & CLI_CHModeFeedbackReturnOffMask) >> CLI_CHModeFeedbackReturnOffShift)
 // Erhöhren / Verrringern um
 #define ParamCLI_CHRelativTempChangeHeating          (knx.paramByte(CLI_ParamCalcIndex(CLI_CHRelativTempChangeHeating)))
 // Minimal
@@ -538,6 +549,8 @@
 #define ParamCLI_CHPID1                              (knx.paramByte(CLI_ParamCalcIndex(CLI_CHPID1)))
 // Maximale Genauigkeit der Solltemperatur
 #define ParamCLI_CHTargetTempRounding1               ((knx.paramByte(CLI_ParamCalcIndex(CLI_CHTargetTempRounding1)) & CLI_CHTargetTempRounding1Mask) >> CLI_CHTargetTempRounding1Shift)
+// Ist Aktiv Rückmeldung
+#define ParamCLI_CHIsActive1                         (PT_CLIIsActive)((knx.paramByte(CLI_ParamCalcIndex(CLI_CHIsActive1)) & CLI_CHIsActive1Mask) >> CLI_CHIsActive1Shift)
 // Pulsweitenmodulation Periode
 #define ParamCLI_CHPWM1                              (knx.paramWord(CLI_ParamCalcIndex(CLI_CHPWM1)))
 // Modusauswahl über
@@ -556,6 +569,8 @@
 #define ParamCLI_CHPID2                              (knx.paramByte(CLI_ParamCalcIndex(CLI_CHPID2)))
 // Maximale Genauigkeit der Solltemperatur
 #define ParamCLI_CHTargetTempRounding2               ((knx.paramByte(CLI_ParamCalcIndex(CLI_CHTargetTempRounding2)) & CLI_CHTargetTempRounding2Mask) >> CLI_CHTargetTempRounding2Shift)
+// Ist Aktiv Rückmeldung
+#define ParamCLI_CHIsActive2                         (PT_CLIIsActive)((knx.paramByte(CLI_ParamCalcIndex(CLI_CHIsActive2)) & CLI_CHIsActive2Mask) >> CLI_CHIsActive2Shift)
 // Pulsweitenmodulation Periode
 #define ParamCLI_CHPWM2                              (knx.paramWord(CLI_ParamCalcIndex(CLI_CHPWM2)))
 // Durch
@@ -579,7 +594,7 @@
 // Entfeuchten Auswahl durch
 #define ParamCLI_CHAutoDehumDeviceSelection          (PT_CLIAutomaticDevice)((knx.paramByte(CLI_ParamCalcIndex(CLI_CHAutoDehumDeviceSelection)) & CLI_CHAutoDehumDeviceSelectionMask) >> CLI_CHAutoDehumDeviceSelectionShift)
 // Ventilator Auswahl durch
-#define ParamCLI_CHAutoFanDeviceSelection            (knx.paramByte(CLI_ParamCalcIndex(CLI_CHAutoFanDeviceSelection)) & CLI_CHAutoFanDeviceSelectionMask)
+#define ParamCLI_CHAutoFanDeviceSelection            (PT_CLIAutomaticDevice)(knx.paramByte(CLI_ParamCalcIndex(CLI_CHAutoFanDeviceSelection)) & CLI_CHAutoFanDeviceSelectionMask)
 // Manuelle Änderung am Kühl-/Heizsystem
 #define ParamCLI_CHBehaviorOnDeviceChange            (PT_CLIBehaviorDeviceChange)((knx.paramByte(CLI_ParamCalcIndex(CLI_CHBehaviorOnDeviceChange)) & CLI_CHBehaviorOnDeviceChangeMask) >> CLI_CHBehaviorOnDeviceChangeShift)
 // Kühlen im Winterbetrieb erlaubt
@@ -593,9 +608,9 @@
 //  (in Millisekunden)
 #define ParamCLI_CHFallbackAutoWaitTimeDelayTimeMS   (paramDelay(knx.paramWord(CLI_ParamCalcIndex(CLI_CHFallbackAutoWaitTimeDelayTime))))
 // Hysterese Kühlen
-#define ParamCLI_CHHysteresisCooling                 ((knx.paramByte(CLI_ParamCalcIndex(CLI_CHHysteresisCooling)) & CLI_CHHysteresisCoolingMask) >> CLI_CHHysteresisCoolingShift)
+#define ParamCLI_CHHysteresisCooling                 (PT_CLIHysteresis)((knx.paramByte(CLI_ParamCalcIndex(CLI_CHHysteresisCooling)) & CLI_CHHysteresisCoolingMask) >> CLI_CHHysteresisCoolingShift)
 // Hysterese Heizen
-#define ParamCLI_CHHysteresisHeating                 (knx.paramByte(CLI_ParamCalcIndex(CLI_CHHysteresisHeating)) & CLI_CHHysteresisHeatingMask)
+#define ParamCLI_CHHysteresisHeating                 (PT_CLIHysteresis)(knx.paramByte(CLI_ParamCalcIndex(CLI_CHHysteresisHeating)) & CLI_CHHysteresisHeatingMask)
 // Fenster offen Behandlung
 #define ParamCLI_CHWindowOpenEnabled                 ((bool)(knx.paramByte(CLI_ParamCalcIndex(CLI_CHWindowOpenEnabled)) & CLI_CHWindowOpenEnabledMask))
 // Ausführen
@@ -672,7 +687,7 @@
 
 // Communication objects per channel (multiple occurrence)
 #define CLI_KoBlockOffset 550
-#define CLI_KoBlockSize 36
+#define CLI_KoBlockSize 43
 
 #define CLI_KoCalcNumber(index) (index + CLI_KoBlockOffset + _channelIndex * CLI_KoBlockSize)
 #define CLI_KoCalcIndex(number) ((number >= CLI_KoCalcNumber(0) && number < CLI_KoCalcNumber(CLI_KoBlockSize)) ? (number - CLI_KoBlockOffset) % CLI_KoBlockSize : -1)
@@ -686,34 +701,41 @@
 #define CLI_KoCTargetTempFb 5
 #define CLI_KoCTargetTempRelativ 6
 #define CLI_KoCRoomTemp 7
-#define CLI_KoCKo8 8
-#define CLI_KoCKo9 9
-#define CLI_KoCKo10 10
-#define CLI_KoCKo11 11
-#define CLI_KoCKo12 12
+#define CLI_KoCActiveMode 8
+#define CLI_KoCAutoReqHeat 9
+#define CLI_KoCAutoReqCool 10
+#define CLI_KoCAutoReqDehum 11
+#define CLI_KoCAutoReqFan 12
 #define CLI_KoCKo13 13
 #define CLI_KoCKo14 14
 #define CLI_KoCKo15 15
-#define CLI_KoCDev1Power 16
-#define CLI_KoCDev1Set 17
-#define CLI_KoCDev1PWM 18
-#define CLI_KoCDev1SetFb 19
-#define CLI_KoCDev1RoomTemp 20
-#define CLI_KoCKo20 21
-#define CLI_KoCKo21 22
-#define CLI_KoCKo22 23
-#define CLI_KoCKo23 24
-#define CLI_KoCKo24 25
-#define CLI_KoCKo25 26
+#define CLI_KoCKo16 16
+#define CLI_KoCKo17 17
+#define CLI_KoCKo18 18
+#define CLI_KoCKo19 19
+#define CLI_KoCKo20 20
+#define CLI_KoCDev1Power 21
+#define CLI_KoCDev1Set 22
+#define CLI_KoCDev1PWM 23
+#define CLI_KoCDev1SetFb 24
+#define CLI_KoCDev1RoomTemp 25
+#define CLI_KoCDev1IsActive 26
 #define CLI_KoCKo26 27
 #define CLI_KoCKo27 28
-#define CLI_KoCDev2Power 29
-#define CLI_KoCDev2Set 30
-#define CLI_KoCDev2PWM 31
-#define CLI_KoCDev2SetFb 32
-#define CLI_KoCDev2RoomTemp 33
-#define CLI_KoCWindowOpen 34
-#define CLI_KoCWindowOpenAlarm 35
+#define CLI_KoCKo28 29
+#define CLI_KoCKo29 30
+#define CLI_KoCKo30 31
+#define CLI_KoCKo31 32
+#define CLI_KoCKo32 33
+#define CLI_KoCKo33 34
+#define CLI_KoCDev2Power 35
+#define CLI_KoCDev2Set 36
+#define CLI_KoCDev2PWM 37
+#define CLI_KoCDev2SetFb 38
+#define CLI_KoCDev2RoomTemp 39
+#define CLI_KoCDev2IsActive 40
+#define CLI_KoCWindowOpen 41
+#define CLI_KoCWindowOpenAlarm 42
 
 // {{0:HVAC %C%}}: Modus Auswahl
 #define KoCLI_CModeSelection                      (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCModeSelection)))
@@ -731,22 +753,32 @@
 #define KoCLI_CTargetTempRelativ                  (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCTargetTempRelativ)))
 // {{0:HVAC %C%}}: Raumtemperatur
 #define KoCLI_CRoomTemp                           (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCRoomTemp)))
-// 
-#define KoCLI_CKo8                                (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo8)))
-// 
-#define KoCLI_CKo9                                (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo9)))
-// 
-#define KoCLI_CKo10                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo10)))
-// 
-#define KoCLI_CKo11                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo11)))
-// 
-#define KoCLI_CKo12                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo12)))
+// {{0:HVAC %C%}}: Aktiver Modus
+#define KoCLI_CActiveMode                         (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCActiveMode)))
+// {{0:HVAC %C%}}: Anforderung Heizen für Automatik
+#define KoCLI_CAutoReqHeat                        (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCAutoReqHeat)))
+// {{0:HVAC %C%}}: Anforderung Kühlen für Automatik
+#define KoCLI_CAutoReqCool                        (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCAutoReqCool)))
+// {{0:HVAC %C%}}: Anforderung Entfeuchtung für Automatik
+#define KoCLI_CAutoReqDehum                       (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCAutoReqDehum)))
+// {{0:HVAC %C%}}: Anforderung Lüfter für Automatik
+#define KoCLI_CAutoReqFan                         (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCAutoReqFan)))
 // 
 #define KoCLI_CKo13                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo13)))
 // 
 #define KoCLI_CKo14                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo14)))
 // 
 #define KoCLI_CKo15                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo15)))
+// 
+#define KoCLI_CKo16                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo16)))
+// 
+#define KoCLI_CKo17                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo17)))
+// 
+#define KoCLI_CKo18                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo18)))
+// 
+#define KoCLI_CKo19                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo19)))
+// 
+#define KoCLI_CKo20                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo20)))
 // {{0:HVAC %C% Kühl-/Heizsystem 1}}: Strom
 #define KoCLI_CDev1Power                          (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCDev1Power)))
 // {{0:HVAC %C% Kühl-/Heizsystem 1}}: Solltemperatur
@@ -758,21 +790,23 @@
 // 
 #define KoCLI_CDev1RoomTemp                       (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCDev1RoomTemp)))
 // 
-#define KoCLI_CKo20                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo20)))
-// 
-#define KoCLI_CKo21                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo21)))
-// 
-#define KoCLI_CKo22                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo22)))
-// 
-#define KoCLI_CKo23                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo23)))
-// 
-#define KoCLI_CKo24                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo24)))
-// 
-#define KoCLI_CKo25                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo25)))
+#define KoCLI_CDev1IsActive                       (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCDev1IsActive)))
 // 
 #define KoCLI_CKo26                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo26)))
 // 
 #define KoCLI_CKo27                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo27)))
+// 
+#define KoCLI_CKo28                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo28)))
+// 
+#define KoCLI_CKo29                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo29)))
+// 
+#define KoCLI_CKo30                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo30)))
+// 
+#define KoCLI_CKo31                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo31)))
+// 
+#define KoCLI_CKo32                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo32)))
+// 
+#define KoCLI_CKo33                               (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCKo33)))
 // {{0:HVAC %C%: Kühl-/Heizsystem 2}}: Strom
 #define KoCLI_CDev2Power                          (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCDev2Power)))
 // {{0:HVAC %C%: Kühl-/Heizsystem 2}}: Solltemperatur
@@ -783,6 +817,8 @@
 #define KoCLI_CDev2SetFb                          (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCDev2SetFb)))
 // 
 #define KoCLI_CDev2RoomTemp                       (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCDev2RoomTemp)))
+// 
+#define KoCLI_CDev2IsActive                       (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCDev2IsActive)))
 // {{0:HVAC %C%}}: Fenster offen
 #define KoCLI_CWindowOpen                         (knx.getGroupObject(CLI_KoCalcNumber(CLI_KoCWindowOpen)))
 // {{0:HVAC %C%}}: Fenster offen Alarm
@@ -4302,6 +4338,13 @@ enum class PT_CLIModeChange
     Dehumification = 14
 };
 
+enum class PT_CLIHysteresis
+{
+    Hysteresis0_5 = 0,
+    Hysteresis1_0 = 1,
+    Hysteresis2_0 = 2
+};
+
 enum class PT_CLIControlMode
 {
     HVAC = 0,
@@ -4396,11 +4439,24 @@ enum class PT_CLIAutomaticDevice
     RequestByGroupObject = 2
 };
 
+enum class PT_CLIIsActive
+{
+    Calculated = 0,
+    FeedbackOnOff = 1,
+    FeedbackPercent = 2
+};
+
 enum class PT_CLIBehaviorDeviceChange
 {
     LeavesAutomaticModeTemp = 0,
     LeavesAutomaticMode = 1,
     OpenKNXOverridesSelection = 2
+};
+
+enum class PT_CLIModeFeedback
+{
+    ReturnLastActiveMode = 0,
+    ReturnOff = 1
 };
 
 enum class PT_Logic
