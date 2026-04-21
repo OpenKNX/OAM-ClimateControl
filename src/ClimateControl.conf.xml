@@ -9,15 +9,14 @@
   <op:config name="%FCB_VerifyVersion%" value="0.10" />
   <op:config name="%CLI_VerifyVersion%" value="0.1" />
 
-  <op:config name="%ReleaseApplicationVersion%" value="0.3.0" />
-  <op:config name="%ReleaseReplacesVersions%" value="0.2 0.1 0.0" />
+  <op:config name="%ReleaseApplicationVersion%" value="0.4.0" />
+  <op:config name="%ReleaseReplacesVersions%" value="0.3 0.2 0.1 0.0" />
 
   <op:config name="%LOG_NumChannelsDefault%" value="1" />
-  <op:config name="%LOG_EnableSave%" value="0" />
+  <op:config name="%LOG_EnableSave%" value="1" />
 
   <op:config name="%CLI_NumChannelsDefault%" value="1" />
 
-  <op:config name="%LOG_EnableSave%" value="1" />
   <op:config name="%BASE_ShowDeviceDependentLedSelector%" value="1"></op:config>
 
 </KNX>
