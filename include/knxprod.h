@@ -17,8 +17,8 @@
 #define MAIN_FirmwareName "Klimasteuerung (HVAC) (Beta)"
 #define MAIN_OpenKnxId 0xAE
 #define MAIN_ApplicationNumber 58
-#define MAIN_ApplicationVersion 4
-#define MAIN_FirmwareRevision 2
+#define MAIN_ApplicationVersion 5
+#define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
 #define MAIN_ParameterSize 9827
 #define MAIN_MaxKoNumber 1194
@@ -4396,7 +4396,8 @@ enum class PT_CLIWindowOpenCondition
     Disabled = 0,
     IfHeating = 1,
     IfCooling = 2,
-    IfHeatingOrCooling = 3
+    IfHeatingOrCooling = 3,
+    Always = 4
 };
 
 enum class PT_CLIWindowOpenAction
