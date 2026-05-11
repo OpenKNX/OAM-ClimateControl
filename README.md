@@ -9,6 +9,7 @@ Dieses Modul erlaubt die Steuerung von zwei Kühl-/Heizsystemen über ein HVAC-G
 - Umschaltung zwischen Sommer- und Winterbetrieb
 - Berechnung der 24-Stunden-Durchschnittstemperatur
 - Wiederherstellung des eingestellten Modus, der Solltemperatur und der letzten Außentemperaturwerte nach Busspannungsausfall und Gerätestart
+- Über die integrierte Pulsweitenmodulation kann auch ein normaler Schaltaktor zu einem Heizungsaktor mit angeschlossen Thermoelektrisches-Ventile umfunktioniert werden
 
 ## Anwenderdokumentation
 
