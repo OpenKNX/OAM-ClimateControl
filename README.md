@@ -1,15 +1,14 @@
 # OAM-ClimateControl
 
-Dieses Modul erlaubt die Steuerung von zwei Kühl-/Heizsystemen über ein HVAC Gruppenobjekt.
+Dieses Modul erlaubt die Steuerung von zwei Kühl-/Heizsystemen über ein HVAC-Gruppenobjekt.
 
 ## Features
 
-Features:
-
-- Fenster offen Behandlung
-- Sommer- / Winterbetriebumschaltung
-- 24h Durchschnittstemperature Berechnung
-- Wiederherstellen des eingestellten Modus, der Solltemperatur und der letzten Außentemperaturwerte nach Busspannungsausfall und Gerätestart
+- Übergreifender Automatikmodus für zwei Heizsysteme
+- Behandlung bei offenem Fenster
+- Umschaltung zwischen Sommer- und Winterbetrieb
+- Berechnung der 24-Stunden-Durchschnittstemperatur
+- Wiederherstellung des eingestellten Modus, der Solltemperatur und der letzten Außentemperaturwerte nach Busspannungsausfall und Gerätestart
 
 ## Anwenderdokumentation
 
@@ -17,11 +16,11 @@ Die Anwenderdokumentation ist [hier](./doc/Applikationsbeschreibung.md) zu finde
 
 ## Firmware
 
-Eine vorkompilierte Firmware ist [hier](https://github.com/OpenKNX/OAM-ClimateControl/releases) zu finden. ZIP-Datei herunterladen, entpacken und der Anleitung im Readme folgen.
+Eine vorkompilierte Firmware ist [hier](https://github.com/OpenKNX/OAM-ClimateControl/releases) verfügbar. ZIP-Datei herunterladen, entpacken und der Anleitung in der README folgen.
 
 ## Hardware
 
-Als Hardware kann jede OpenKNX oder OpenKNX-Ready Hardware verwendet werden.
+Als Hardware kann jede OpenKNX- oder OpenKNX-Ready-Hardware verwendet werden.
 Die vorkompilierte Firmware unterstützt:
 
 - [REG1-Base](https://github.com/OpenKNX/OpenKNX/wiki/REG1-Base)
