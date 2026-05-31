@@ -14,16 +14,16 @@
 #define ETS_ModuleId_CLI 3
 #define ETS_ModuleId_LOG 4
 #define ETS_ModuleId_FCB 5
-#define MAIN_FirmwareName "Klimasteuerung (HVAC) (Beta)"
+#define MAIN_FirmwareName "Klimasteuerung (HVAC)"
 #define MAIN_OpenKnxId 0xAE
 #define MAIN_ApplicationNumber 58
-#define MAIN_ApplicationVersion 6
+#define MAIN_ApplicationVersion 7
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
 #define MAIN_ParameterSize 9927
 #define MAIN_MaxKoNumber 1194
 #define MAIN_OrderNumber "MGKnxCLI"
-#define BASE_ModuleVersion 23
+#define BASE_ModuleVersion 24
 #define UCT_ModuleVersion 5
 #define CLI_ModuleVersion 1
 #define LOG_ModuleVersion 67
