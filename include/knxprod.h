@@ -14,10 +14,10 @@
 #define ETS_ModuleId_CLI 3
 #define ETS_ModuleId_LOG 4
 #define ETS_ModuleId_FCB 5
-#define MAIN_FirmwareName "Klimasteuerung (HVAC)"
+#define MAIN_FirmwareName "Klimasteuerung (HVAC) (Dev)"
 #define MAIN_OpenKnxId 0xAE
-#define MAIN_ApplicationNumber 58
-#define MAIN_ApplicationVersion 7
+#define MAIN_ApplicationNumber 57
+#define MAIN_ApplicationVersion 19
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
 #define MAIN_ParameterSize 9927
